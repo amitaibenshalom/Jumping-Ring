@@ -46,14 +46,16 @@ def main():
                     language = (language + 1) % len(LANGUAGES)  # toggle language
                     
                 if event.key == pygame.K_UP:
-                    voltage = min(voltage + 10, MAX_VOLTAGE)
+                    voltage = min(voltage + 5, MAX_VOLTAGE)
 
                 if event.key == pygame.K_DOWN:
-                    voltage = max(voltage - 10, MIN_VOLTAGE)
+                    voltage = max(voltage - 5, MIN_VOLTAGE)
 
-                if event.key == pygame.K_RETURN:
-                    state = (state + 1) % len(STATES)  # toggle state (only one state for this project so it's not really needed but it's here for future use)
-        
+                # if event.key == pygame.K_LEFT:
+                #     voltage = MAX_VOLTAGE
+
+                # if event.key == pygame.K_RIGHT:
+                #     voltage = MIN_VOLTAGE
 
         data_from_arduino = read_line(ser, logger=logger)  # try to read from arduino
         if data_from_arduino == SERIAL_ERROR:  # if arduino WAS connected at start, but now failed to read:
@@ -75,9 +77,9 @@ def main():
 
 
         if data_from_arduino and data_from_arduino != SERIAL_ERROR:  # if data is vaild
-            # print(data_from_arduino)
+            print(data_from_arduino)
             voltage, has_ignited, language = parse_data(data_from_arduino, logger=logger)
-            # print(f"parsed: current {current} charge {charge} has_ignited {has_ignited} language {language}")
+            print(f"parsed: voltage {voltage} has_ignited {has_ignited} language {language}")
             
             if has_ignited:
                 logger.info(f"Ring jumped!")

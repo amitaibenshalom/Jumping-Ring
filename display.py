@@ -18,22 +18,6 @@ def display_state(screen, state=MEASURE, language=HEBREW, voltage=MIN_VOLTAGE):
     if state == MEASURE:
         display_measure(screen, language=language, voltage=voltage)
 
-# no opening screen for this exhibit
-# def display_opening(screen, language):
-#     """
-#     Display the opening screen
-#     :param screen: the screen to display the opening screen on
-#     :param language: the language to display the opening screen in
-#     """
-#     if language == HEBREW:
-#         screen.blit(open_heb, (0,0))
-
-#     elif language == ENGLISH:
-#         screen.blit(open_eng, (0,0))
-
-#     elif language == ARABIC:
-#         screen.blit(open_arb, (0,0))
-
 
 def display_measure(screen, language=HEBREW, voltage=MIN_VOLTAGE):
     """
@@ -51,21 +35,11 @@ def display_measure(screen, language=HEBREW, voltage=MIN_VOLTAGE):
         screen.blit(measure_arb, (0,0))
 
     # sub function to calculate the current, charge and energy from the voltage and capacitance
-    # def calculate_charge_and_energy(voltage):
-    #     """
-    #     Calculate the charge and energy from the voltage and capacitance
-    #     :param voltage: the voltage
-    #     :return: the charge and the energy
-    #     """
-    #     charge = voltage * CAPACITANCE
-    #     energy = 0.5 * CAPACITANCE * voltage ** 2
-    #     return charge, energy
-    # write the same as lambda function
     calculate_charge_and_energy = lambda voltage: (max(min(voltage * CAPACITANCE, MAX_CHARGE), MIN_CHARGE), max(min(0.5 * CAPACITANCE * voltage ** 2, MAX_ENERGY), MIN_ENERGY))
 
     charge, energy = calculate_charge_and_energy(voltage)
     display_bars(screen, voltage, charge, energy)
-    
+    display_text_values(screen, voltage, charge, energy)
     # display_current(screen, current)
     # display_charge(screen, charge)
 
@@ -95,25 +69,25 @@ def display_bars(screen, voltage=MIN_VOLTAGE, charge=MIN_CHARGE, energy=MIN_ENER
     display_bar_from_values(screen, energy, MAX_ENERGY, MIN_ENERGY, bar_full_energy)
 
 
-def display_current(screen, current):
+def display_text_values(screen, voltage=MIN_VOLTAGE, charge=MIN_CHARGE, energy=MIN_ENERGY):
     """
-    Display the current on the screen
-    :param screen: the screen to display the current on
-    :param current: the current to display
-    """
-    font = pygame.font.Font(None, CURRENT_TEXT_SIZE)
-    text = font.render(f"{current:.2f}", True, CURRENT_TEXT_COLOR)
-    text_rect = text.get_rect(center=CURRENT_TEXT_POS)
-    screen.blit(text, text_rect)
-
-
-def display_charge(screen, charge):
-    """
-    Display the charge on the screen
-    :param screen: the screen to display the charge on
+    Display the text values on the screen
+    :param screen: the screen to display the text values on
+    :param voltage: the voltage to display
     :param charge: the charge to display
+    :param energy: the energy to display
     """
-    font = pygame.font.Font(None, CHARGE_TEXT_SIZE)
-    text = font.render(f"{charge:.2f}", True, CHARGE_TEXT_COLOR)
-    text_rect = text.get_rect(center=CHARGE_TEXT_POS)
-    screen.blit(text, text_rect)
+
+    # sub function to reduce code duplication
+    def display_text(screen, text, pos, size, color):
+        """
+        sub function to display the text on the screen
+        """
+        font = pygame.font.Font(None, size)
+        text = font.render(f"{text:.2f}", True, color)
+        text_rect = text.get_rect(center=pos)
+        screen.blit(text, text_rect)
+
+    display_text(screen, voltage, VOLTAGE_TEXT_POS, TEXT_SIZE, TEXT_COLOR)
+    display_text(screen, charge, CHARGE_TEXT_POS, TEXT_SIZE, TEXT_COLOR)
+    display_text(screen, energy, ENERGY_TEXT_POS, TEXT_SIZE, TEXT_COLOR)
