@@ -8,13 +8,10 @@ from consts import *
 def display_state(screen, state=MEASURE, language=HEBREW, voltage=MIN_VOLTAGE):
     """
     Display the state screen
-    :param screen: the screen to display the state screen on
+    :param screen: the screen to display the state screen on (right now there is only MEASURE state)
     :param language: the language to display the state screen in
     :param state: the state to display
     """
-    # if state == OPENING:  # no opening screen for this exhibit
-    #     display_opening(screen, language=language)
-
     if state == MEASURE:
         display_measure(screen, language=language, voltage=voltage)
 
@@ -40,8 +37,6 @@ def display_measure(screen, language=HEBREW, voltage=MIN_VOLTAGE):
     charge, energy = calculate_charge_and_energy(voltage)
     display_bars(screen, voltage, charge, energy)
     display_text_values(screen, voltage, charge, energy)
-    # display_current(screen, current)
-    # display_charge(screen, charge)
 
 
 def display_bars(screen, voltage=MIN_VOLTAGE, charge=MIN_CHARGE, energy=MIN_ENERGY):

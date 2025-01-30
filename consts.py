@@ -35,6 +35,7 @@ LOG_FOLDER = os.path.join(os.path.dirname(__file__), "logs")  # get the path of 
 MAX_SIZE_PER_LOG_FILE = 1 * 1024 * 1024  # 1MB
 BACKUP_COUNT = 10  # max number of log files, if all 10 are full, the first one will be deleted, rotating the rest 
 
+
 # pictures
 pygame.init()
 VIEW_PORT = pygame.display.Info().current_w, pygame.display.Info().current_h  # get the screen resolution
@@ -71,7 +72,6 @@ bar_full_voltage = pygame.transform.scale(bar_full_voltage, VIEW_PORT)
 ENERGY_TEXT_POS = (int(2 / 11.0 * VIEW_PORT[0]), int(0.785 * VIEW_PORT[1]))  # the position of the energy text on the screen
 CHARGE_TEXT_POS = (int(0.5 * VIEW_PORT[0]), int(0.785 * VIEW_PORT[1]))  # the position of the charge text on the screen
 VOLTAGE_TEXT_POS = (int(9 / 11 * VIEW_PORT[0]), int(0.785 * VIEW_PORT[1]))  # the position of the voltage text on the screen
-
 BAR_GRAPH_BOTTOM_HEIGHT = int(0.707 * VIEW_PORT[1])  # the bottom of the bar graphs (same for all 3)
 
 # colors
