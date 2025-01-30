@@ -16,7 +16,7 @@ def main():
     """
     # pygame setup
     pygame.display.set_caption("Jumping Ring")
-    screen = pygame.display.set_mode(VIEW_PORT)
+    screen = pygame.display.set_mode(VIEW_PORT, pygame.FULLSCREEN)
     clock = pygame.time.Clock()  # for fps limit
 
     # initial values for the UI
@@ -51,18 +51,10 @@ def main():
                 if event.key == pygame.K_DOWN:
                     voltage = max(voltage - 5, MIN_VOLTAGE)
 
-                # if event.key == pygame.K_LEFT:
-                #     voltage = MAX_VOLTAGE
-
-                # if event.key == pygame.K_RIGHT:
-                #     voltage = MIN_VOLTAGE
-
         data_from_arduino = read_line(ser, logger=logger)  # try to read from arduino
         if data_from_arduino == SERIAL_ERROR:  # if arduino WAS connected at start, but now failed to read:
-            print("Arduino disconnected! Going to default settings")
-            print("Trying to reconnect to Arduino...")
-            logger.info("Arduino disconnected... Going to default settings")
-            logger.info("Trying to reconnect to Arduino...")
+            print("Arduino disconnected. Trying to reconnect to Arduino...")
+            logger.info("Arduino disconnected. Trying to reconnect to Arduino...")
 
             ser = None
             language = HEBREW
@@ -75,11 +67,10 @@ def main():
             ser = open_serial_connection(arduino_port, logger=logger)  # Open the serial port
             last_time_tried_to_connect = time.time()  # update the last time tried to connect
 
-
         if data_from_arduino and data_from_arduino != SERIAL_ERROR:  # if data is vaild
-            print(data_from_arduino)
+            # print(data_from_arduino)
             voltage, has_ignited, language = parse_data(data_from_arduino, logger=logger)
-            print(f"parsed: voltage {voltage} has_ignited {has_ignited} language {language}")
+            # print(f"parsed: voltage {voltage} has_ignited {has_ignited} language {language}")
             
             if has_ignited:
                 logger.info(f"Ring jumped!")

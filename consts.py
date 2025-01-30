@@ -38,7 +38,7 @@ BACKUP_COUNT = 10  # max number of log files, if all 10 are full, the first one 
 # pictures
 pygame.init()
 VIEW_PORT = pygame.display.Info().current_w, pygame.display.Info().current_h  # get the screen resolution
-VIEW_PORT = (607.5, 1080)  # for testing
+# VIEW_PORT = (607.5, 1080)  # for testing
 # VIEW_PORT = (1080, 1920)  # for testing
 
 PICTURES = os.path.join(os.path.dirname(__file__), "pictures")  # get the path of the pictures folder
@@ -66,12 +66,11 @@ measure_arb = pygame.transform.scale(measure_arb, VIEW_PORT)
 bar_full_energy = pygame.transform.scale(bar_full_energy, VIEW_PORT)
 bar_full_charge = pygame.transform.scale(bar_full_charge, VIEW_PORT)
 bar_full_voltage = pygame.transform.scale(bar_full_voltage, VIEW_PORT)
-# 2, 5.5, 9, 10.9
 
-# positions
-ENERGY_TEXT_POS = (int(2 / 10.9 * VIEW_PORT[0]), int(0.785 * VIEW_PORT[1]))  # the position of the energy text on the screen
-CHARGE_TEXT_POS = (int(5.5 / 10.9 * VIEW_PORT[0]), int(0.785 * VIEW_PORT[1]))  # the position of the charge text on the screen
-VOLTAGE_TEXT_POS = (int(9 / 10.9 * VIEW_PORT[0]), int(0.785 * VIEW_PORT[1]))  # the position of the voltage text on the screen
+# positions - dont ask about the magic numbers
+ENERGY_TEXT_POS = (int(2 / 11.0 * VIEW_PORT[0]), int(0.785 * VIEW_PORT[1]))  # the position of the energy text on the screen
+CHARGE_TEXT_POS = (int(0.5 * VIEW_PORT[0]), int(0.785 * VIEW_PORT[1]))  # the position of the charge text on the screen
+VOLTAGE_TEXT_POS = (int(9 / 11 * VIEW_PORT[0]), int(0.785 * VIEW_PORT[1]))  # the position of the voltage text on the screen
 
 BAR_GRAPH_BOTTOM_HEIGHT = int(0.707 * VIEW_PORT[1])  # the bottom of the bar graphs (same for all 3)
 
@@ -79,6 +78,6 @@ BAR_GRAPH_BOTTOM_HEIGHT = int(0.707 * VIEW_PORT[1])  # the bottom of the bar gra
 BLACK = (0, 0, 0)
 TEXT_COLOR = BLACK
 
-# sizes
+# sizes - dont ask about the magic numbers
 TEXT_SIZE = int(50 * VIEW_PORT[0] / 1080)
 BAR_SIZE = (int(781 * VIEW_PORT[0] / 4500), int(2250 * VIEW_PORT[1] / 8000))
