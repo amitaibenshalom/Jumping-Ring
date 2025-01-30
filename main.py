@@ -22,6 +22,7 @@ def main():
     # initial values for the UI
     language = HEBREW
     voltage = MIN_VOLTAGE
+    state = MEASURE
 
     # logging setup - log into a file called log.txt in the folder /logs with the format: [TIME] - [MESSAGE], if the file exists, append to it, if not, create it, if it exceeds 1MB, create a new file with a number suffix (before the .txt) and continue logging to it (e.g., log1.txt, log2.txt, etc.)
     logger = get_logger()
