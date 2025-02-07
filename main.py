@@ -8,6 +8,7 @@ from consts import *
 from display import *
 from arduino import *
 from logs import *
+from detect_drop import *
 
 
 def main():
@@ -23,6 +24,7 @@ def main():
     language = HEBREW
     voltage = MIN_VOLTAGE
     state = MEASURE
+    drop_detector = DropDetector()
 
     # logging setup - log into a file called log.txt in the folder /logs with the format: [TIME] - [MESSAGE], if the file exists, append to it, if not, create it, if it exceeds 1MB, create a new file with a number suffix (before the .txt) and continue logging to it (e.g., log1.txt, log2.txt, etc.)
     logger = get_logger()
@@ -31,6 +33,7 @@ def main():
     # arduino setup
     arduino_port = find_arduino_port(logger=logger)  # find the serial port
     ser = open_serial_connection(arduino_port, logger=logger)  # Open the serial port
+    time.sleep(1)  # wait for the arduino to reset
     last_time_tried_to_connect = time.time()  # for not trying to connect too often
 
     while True:
@@ -69,14 +72,13 @@ def main():
 
         if data_from_arduino and data_from_arduino != SERIAL_ERROR:  # if data is vaild
             # print(data_from_arduino)
-            voltage, has_ignited, language = parse_data(data_from_arduino, logger=logger)
-            # print(f"parsed: voltage {voltage} has_ignited {has_ignited} language {language}")
+            voltage, voltage_analogread, language, error = parse_data(data_from_arduino, logger=logger)
+            # print(f"parsed: voltage {voltage} voltage_analogread {voltage_analogread} language {language}")
             
-            if has_ignited:
-                logger.info(f"Ring jumped!")
-                print("Ring jumped!")
+            if not error:
+                drop_detector.detect_drop(voltage, logger=logger)  # detect if there was a drop in voltage
 
-        screen.fill((0,0,0))  # reset screen
+        screen.fill(BLACK)  # reset screen
         display_state(screen, state=state, language=language, voltage=voltage)  # render the screen
         pygame.display.flip()
         clock.tick(FPS)

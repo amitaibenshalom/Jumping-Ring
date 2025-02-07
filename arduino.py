@@ -1,6 +1,6 @@
 """
 Filename: arduino.py
-Purpose: Arduino functions for the Hydrogen Rocket UI
+Purpose: Arduino functions for the Jumping Ring UI
 """
 
 import serial
@@ -29,7 +29,7 @@ def find_arduino_port(logger=None):
     if logger:
         logger.error("Error: Arduino not found")
 
-    return None  # continue without Arduino (if USE_ARDUINO is false)
+    return None  # continue without Arduino
 
 
 def open_serial_connection(port=None, baud_rate=BAUDRATE, timeout=1, logger=None):
@@ -41,6 +41,7 @@ def open_serial_connection(port=None, baud_rate=BAUDRATE, timeout=1, logger=None
 
     try:
         ser = serial.Serial(port, baud_rate, timeout=timeout)
+        
         print(f"Connected to {port}")
         if logger:
             logger.info(f"Connected to {port}")
@@ -77,15 +78,19 @@ def read_line(ser=None, logger=None):
 
 def parse_data(raw_data, logger=None):
     """
-    parse the raw data line (<voltage> <has_ignited> <language>)
+    parse the raw data line (<voltage> <voltage_analogread> <language>)
     :param raw_data: the raw data
     """
     try:
         data = raw_data.split(" ")
-        # ----------------- voltage ------------------------------ has_ignited --- language
-        return max(min(float(data[0]), MAX_VOLTAGE), MIN_VOLTAGE), int(data[1]), int(data[2])
+        # ----------------- voltage --------------------------- voltage_analogread --- language
+        return max(min(float(data[0]), MAX_VOLTAGE), MIN_VOLTAGE), int(data[1]), int(data[2]), PARSE_VALID
     
     except:
         print(f"Error parsing data: {raw_data}")
         if logger:
             logger.error(f"Error parsing data: {raw_data}")
+        
+        return 0, 0, 0, PARSE_ERROR  # default values for voltage, voltage_analogread, language
+
+
